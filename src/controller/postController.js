@@ -12,7 +12,18 @@ export default {
 
   getAll: async (req, res, next) => {
     try {
-      const posts = await Post.find();
+      const { title, author } = req.query;
+      const query = {};
+
+      if (title) {
+        query.title = { $regex: title, $options: "i" };
+      }
+
+      if (author) {
+        query.author = { $regex: author, $options: "i" };
+      }
+
+      const posts = await Post.find(query);
       res.json(posts);
     } catch (error) {
       next(error);
@@ -24,30 +35,6 @@ export default {
       const post = await Post.findById(req.params.id);
       if (!post) {
         return res.status(404).json({ error: "Postagem não encontrada." });
-      }
-      res.json(post);
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  getByTitle: async (req, res, next) => {
-    try {
-      const post = await Post.find({ title: req.params.title });
-      if (post.length === 0) {
-        return res.status(404).json({ error: "Nenhuma postagem encontrada." });
-      }
-      res.json(post);
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  getByAuthor: async (req, res, nest) => {
-    try {
-      const post = await Post.find({ author: req.params.author });
-      if (post.length === 0) {
-        return res.status(404).json({ error: "Nenhuma postagem encontrada." });
       }
       res.json(post);
     } catch (error) {
