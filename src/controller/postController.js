@@ -1,9 +1,15 @@
 import Post from "../model/Post.js";
+import cache from "../config/cache.js";
 
 export default {
   create: async (req, res, next) => {
     try {
       const post = await Post.create(req.body);
+
+      cache.del("/posts", (err) => {
+        if (err) console.error("Erro ao limpar o cache: ", err);
+      });
+
       res.json(post);
     } catch (error) {
       next(error);
