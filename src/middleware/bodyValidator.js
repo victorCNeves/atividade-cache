@@ -1,4 +1,4 @@
-export default (req, res, next) => {
+export default async (req, res, next) => {
   const { title, content, author } = req.body;
   const errors = {};
 
