@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export default (req, res, next) => {
   const { id } = req.params;
 
