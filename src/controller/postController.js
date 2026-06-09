@@ -1,14 +1,15 @@
 import Post from "../model/Post.js";
-import cache from "../config/cache.js";
+import client from "../config/redis.js";
 
 export default {
   create: async (req, res, next) => {
     try {
       const post = await Post.create(req.body);
 
-      cache.del("/posts", (err) => {
-        if (err) console.error("Erro ao limpar o cache: ", err);
-      });
+      const keys = await client.keys("cache:/posts*");
+      if (keys.length > 0) {
+        await client.del(keys);
+      }
 
       res.json(post);
     } catch (error) {
