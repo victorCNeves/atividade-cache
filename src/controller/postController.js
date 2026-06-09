@@ -23,11 +23,11 @@ export default {
       const query = {};
 
       if (title) {
-        query.title = { $regex: title, $options: "i" };
+        query.title = { $regex: `\\b${title}`, $options: "i" };
       }
 
       if (author) {
-        query.author = { $regex: author, $options: "i" };
+        query.author = { $regex: `\\b${author}`, $options: "i" };
       }
 
       const posts = await Post.find(query);
