@@ -1,4 +1,5 @@
 import express from "express";
+import compression from "compression";
 import connectDB from "./config/db.js";
 import routes from "./routes/routes.js";
 import errors from "./middleware/errors.js";
@@ -12,6 +13,8 @@ try {
 }
 
 app.use(express.json());
+
+app.use(compression());
 
 app.use(routes);
 
